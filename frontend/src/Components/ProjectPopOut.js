@@ -123,6 +123,7 @@ const ProjectPopOut = ({ projectData }) => {
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
   const [projectComments, setProjectComments] = useState([]);
+  const [allusers, setAllUsers] = useState([]);
   const [tags, setTags] = useState([]); 
   const [isUserJoined, setIsUserJoined] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -132,12 +133,34 @@ const ProjectPopOut = ({ projectData }) => {
     }
     return link;
   };
-  const allusers=JSON.parse(localStorage.getItem("allUsers"));
-  console.log('All Users:', allusers);
-    const projectowner=allusers.filter(user => user._id === projectData.owner)[0];
-    console.log('course Adder:', projectowner);
-  const user = JSON.parse(localStorage.getItem("userData"));
 
+  const user = JSON.parse(localStorage.getItem("userData"));
+  var projectowner;
+  useEffect(() => {
+  const fetchAllUsers = async () => {
+    try {
+      const response = await fetch("http://localhost:5500/users/fetch/all");
+      if (response.ok) {
+        const allUsersData = await response.json();
+        console.log(allUsersData.data);
+        setAllUsers(allUsersData.data);
+      } else {
+        throw new Error("Failed to fetch all users data");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  fetchAllUsers();
+  
+}, [projectData]);
+
+useEffect(()=>{
+  projectowner=allusers.filter(user => user._id === projectData.owner)[0];
+  
+  console.log(projectData.owner);
+},[allusers]);
+  
   const handleJoinEvent = () => {
 
     fetch(`http://localhost:5500/projects/addContributor/${projectData._id}/${user._id}`, {
@@ -248,7 +271,7 @@ const ProjectPopOut = ({ projectData }) => {
         <div className="project_pop_left">
           <div className="project_pop_profile">
             <div className="project_profile_tag">
-              <div className="project_pop_name">{projectowner.username}</div>
+              {/* <div className="project_pop_name">{projectowner.username}</div> */}
               <img src={mySVGURL} alt="" className="project_pop_profileIcon" />
             </div>
             <div className="project_pop_likes">
@@ -277,19 +300,14 @@ const ProjectPopOut = ({ projectData }) => {
           style={{ backgroundColor: projectData.status === 'completed' || isUserJoined ? 'green' : 'blue', color: 'white', marginBottom: '1vw', padding: '0.4vw 1vw', fontSize: '1.5vw', borderRadius: '1vw', cursor: 'pointer' }}>
             {projectData.status === 'completed' ? 'Completed' : isUserJoined ? 'Joined' : 'Join'}
           </button>
-
-      {user._id === projectowner._id && !isCompleted && (
+      {
+        projectowner && user._id === projectowner._id && !isCompleted && (
         <button className="project_pop_joinBtn" onClick={handleCompleteClick} disabled={isCompleted} style={{backgroundColor: isCompleted?'green':'blue', color: 'white', padding: '0.4vw 1vw', fontSize: '1.5vw', borderRadius: '1vw', cursor: 'pointer' }}>
           {isCompleted ? 'Project is Completed' : 'Click here to mark this project as Completed'}
         </button>
       )}
       </div>
-    </div>
-  
-
-          
-        
-
+    </div>      
         {/* Reviews Section */}
         <div className="project_pop_right">
           <div className="project_pop_reviewsHeading">Reviews</div>

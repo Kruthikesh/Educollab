@@ -22,6 +22,16 @@ const ProfileCard = () => {
     document.body.removeChild(link); // Remove the link from the DOM once clicked
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    const link = document.createElement('a');
+    link.href = 'http://localhost:3000';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+  };
+
   return (
     <div className="ProfileCardBox">
       <div className="ProfileCard-leftPart">
@@ -51,6 +61,7 @@ const ProfileCard = () => {
             <div className="ProfileCard-rightPart-upper-part-name">
               {userData.username}
               <img src={EditProfileIcon} alt="" className="editProfileIcon" onClick={handleEditProfileClick} />
+              <button onClick={handleLogout}> Logout </button>
             </div>
 
             <div className="ProfileCard-rightPart-upper-part-post">

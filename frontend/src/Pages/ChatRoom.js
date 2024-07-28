@@ -156,6 +156,7 @@ const CollabPage = () => {
       try {
         const response = await axios.get(`http://localhost:5500/api/collab/collabs/${userId}`);
         setCollabedProjects(response.data);
+        // console.log(typeof(response.data));
       } catch (error) {
         console.error('Error fetching collabed projects:', error);
       }
@@ -193,14 +194,15 @@ const CollabPage = () => {
       <div className="chatroom_left">
       <ChatList collabedProjects={collabedProjects} onProjectClick={handleProjectClick} socket={socket} />
       </div>
-      {selectedProject ? (
+      {
+      selectedProject ? (
         <div className="chatroom_right">
         <ChatContent userId={userId} selectedProject={selectedProject} messages={messages} socket={socket} updateMessages={updateMessages} />
       </div>) : 
       (<div className="chatroom_right">
         <p> Select a project to start chatting </p>
-        </div>) }
-
+        </div>)
+        }
     </div>
   );
 };

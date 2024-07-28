@@ -97,7 +97,7 @@ export default class ChatContent extends Component {
                 index={index}
                 key={index} // Consider using a unique identifier if available
                 user={msg.userID}
-                username={JSON.parse(localStorage.getItem('allUsers')).find(user => user._id === msg.userID).email.split('@')[0]}
+                // username={JSON.parse(localStorage.getItem('allUsers')).find(user => user._id === msg.userID).email.split('@')[0]}
                 msg={msg.message}
               />
             ))}

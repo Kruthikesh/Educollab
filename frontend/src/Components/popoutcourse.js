@@ -149,8 +149,8 @@ const Popoutcourse = ({ course }) => {
     const userid=user._id;
   const allusers=JSON.parse(localStorage.getItem("allUsers"));
   console.log('All Users:', allusers);
-    const courseadder=allusers.filter(user => user._id === course.addedBy)[0];
-    console.log('course Adder:', courseadder);
+    // const courseadder=allusers.filter(user => user._id === course.addedBy)[0];
+    // console.log('course Adder:', courseadder);
     useEffect(() => {
     const fetchFeedback = async () => {
         try {
@@ -214,7 +214,7 @@ const Popoutcourse = ({ course }) => {
         <div className="course_pop_left">
           <div className="course_pop_profile">
             <div className="course_profile_tag">
-              <div className="course_pop_name">{courseadder.username}</div>
+              {/* <div className="course_pop_name">{courseadder.username}</div> */}
               <img src={mySVGURL} alt="" className="course_pop_profileIcon" />
             </div>
             <div className="course_pop_likes">

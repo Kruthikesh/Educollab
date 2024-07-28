@@ -3,20 +3,10 @@ import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import "./AddCourse.css";
 
 const AddCourse = () => {
-  // const [userData, setUserData] = useState(() =>
-  //   JSON.parse(localStorage.getItem("userData") || "{}")
-  // );
-
-  // Initialize form values directly from userData state
-  // const initialValues = {
-  //   githubID: userData?.githubID || "",
-  //   designation: userData?.designation || "",
-  //   tags: [""], // Assuming tags always start empty or can be populated similarly if needed
-  // };
-
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const user=JSON.parse(localStorage.getItem("userData"));
   const userid=user._id;
+  console.log(userid);
   const initialValues = {
     courseName: "",
     courseDesc: "",
@@ -24,10 +14,7 @@ const AddCourse = () => {
     tags: [""], // Initialize tags as an empty array
   };
   const handleSubmit = async (values) => {
-     // Exit if no userData is found
-     
-
-    try {
+     try {
       console.log("new course: ", values);
       const response = await fetch(
         `http://localhost:5500/courses/add/${userid}/addCourse`,
@@ -39,7 +26,6 @@ const AddCourse = () => {
           body: JSON.stringify({tag: values.tags, courseName: values.courseName, courseDesc: values.courseDesc, linkToCourse: values.linkToCourse}),
         }
       );
-
       if (!response.ok) {
         throw new Error("Failed to update profile");
       }

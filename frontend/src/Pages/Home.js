@@ -54,14 +54,14 @@ const Home = () => {
           const allUsersData = await response.json();
           console.log(allUsersData.data);
           setAllUsers(allUsersData.data);
-          await localStorage.setItem(
-            "allUsers",
-            JSON.stringify(allUsersData.data)
-          );
-          console.log(
-            "All Users data stored successfully in localStorage.",
-            allUsers
-          );
+          // await localStorage.setItem(
+          //   "allUsers",
+          //   JSON.stringify(allUsersData.data)
+          // );
+          // console.log(
+          //   "All Users data stored successfully in localStorage.",
+          //   allUsers
+          // );
           // Iterate over each array in the object
           for (const key in allUsersData) {
             if (Array.isArray(allUsersData[key])) {
@@ -108,10 +108,10 @@ const Home = () => {
         if (response.ok) {
           const projectsData = await response.json();
           setAllProjects(projectsData);
-          await localStorage.setItem(
-            "projectsData",
-            JSON.stringify(projectsData)
-          );
+          // await localStorage.setItem(
+          //   "projectsData",
+          //   JSON.stringify(projectsData)
+          // );
           console.log("Projects data stored in localStorage:", allProjects);
         } else {
           throw new Error("Failed to fetch projects data");
@@ -157,9 +157,100 @@ const Home = () => {
     fetchUserData();
     fetchAllUsers();
     fetchAllProjects();
-    fetchAllCourses();
-    fetchAllDoubts();
+    // fetchAllCourses();
+    // fetchAllDoubts();
   }, []);
+  return (
+    <div>
+    {userData && (
+      <>
+        <Navbar userData={userData} />
+        <div className="welcome-message">
+          {userName && (
+            <div className="text-welcome">
+              Hi, {userName} <br /> Welcome to 'EduCollab'
+            </div>
+          )}
+        </div>
+        <div className="add-project">
+           <Link to="/addproject"><button className="add-project-btn">Add Project</button></Link>
+        </div>
+        <div className="small-navbar">
+          <button
+            onClick={() => handleClickProjectType("All")}
+            className={
+              selectedProjectType === "All"
+                ? "small-buttons-selected"
+                : "small-buttons-not-selected"
+            }
+          >
+            All Projects
+          </button>
+          <button
+            onClick={() => handleClickProjectType("My")}
+            className={
+              selectedProjectType === "My"
+                ? "small-buttons-selected"
+                : "small-buttons-not-selected"
+            }
+            >
+            My Projects
+          </button>
+        </div>
+        <div className="small-screen">
+          {selectedProjectType === "All" && (
+            <div className="carousal-space">
+              <div className="category_name">New Arrivals</div>
+              <div className="rule_r"></div>
+              <div className="projects">
+                {allProjects.length > 0 ? (
+                  allProjects.map((project) => (
+                    <ProjectCard key={project._id} projectData={project} />
+                  ))
+                ) : (
+                  <div>No projects to show.....</div>
+                )}
+              </div>
+            </div>
+          )}
+          {selectedProjectType === "My" && (
+            <div className="carousal-space">
+              <div className="category_name">My Projects</div>
+              <div className="rule_r"></div>
+              <div className="projects my">
+                {allProjects.filter((project) => userData.myProjects.includes(project._id)).length > 0 ? (
+                  allProjects
+                  .filter((project) => userData.myProjects.includes(project._id))
+                    .map((project) => (
+                      <ProjectCard key={project._id} projectData={project} />
+                    ))
+                  ) : (
+                  <div>No projects to show.....</div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="center">
+          {/* <div class="pagination">
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">6</a>
+        <a href="#">&raquo;</a>
+        </div> */}
+          <footer className="footer">Thank you for visiting</footer>
+        </div>
+      </>
+    )}
+  </div>
+);
+};
+
+export default Home;
+
 //   return (
 //     <div>
 //       {userData && (
@@ -264,93 +355,3 @@ const Home = () => {
 // };
 
 // export default Home;
-return (
-  <div>
-    {userData && (
-      <>
-        <Navbar userData={userData} />
-        <div className="welcome-message">
-          {userName && (
-            <div className="text-welcome">
-              Hi, {userName} <br /> Welcome to 'EduCollab'
-            </div>
-          )}
-        </div>
-        <div className="add-project">
-           <Link to="/addproject"><button className="add-project-btn">Add Project</button></Link>
-        </div>
-        <div className="small-navbar">
-          <button
-            onClick={() => handleClickProjectType("All")}
-            className={
-              selectedProjectType === "All"
-                ? "small-buttons-selected"
-                : "small-buttons-not-selected"
-            }
-          >
-            All Projects
-          </button>
-          <button
-            onClick={() => handleClickProjectType("My")}
-            className={
-              selectedProjectType === "My"
-                ? "small-buttons-selected"
-                : "small-buttons-not-selected"
-            }
-          >
-            My Projects
-          </button>
-        </div>
-        <div className="small-screen">
-          {selectedProjectType === "All" && (
-            <div className="carousal-space">
-              <div className="category_name">New Arrivals</div>
-              <div className="rule_r"></div>
-              <div className="projects">
-                {allProjects.length > 0 ? (
-                  allProjects.map((project) => (
-                    <ProjectCard key={project._id} projectData={project} />
-                  ))
-                ) : (
-                  <div>No projects to show.....</div>
-                )}
-              </div>
-            </div>
-          )}
-          {selectedProjectType === "My" && (
-            <div className="carousal-space">
-              <div className="category_name">My Projects</div>
-              <div className="rule_r"></div>
-              <div className="projects my">
-                {allProjects.filter((project) => userData.myProjects.includes(project._id)).length > 0 ? (
-                  allProjects
-                    .filter((project) => userData.myProjects.includes(project._id))
-                    .map((project) => (
-                      <ProjectCard key={project._id} projectData={project} />
-                    ))
-                ) : (
-                  <div>No projects to show.....</div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-        <div className="center">
-          {/* <div class="pagination">
-        <a href="#" class="active">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">6</a>
-        <a href="#">&raquo;</a>
-      </div> */}
-          <footer className="footer">Thank you for visiting</footer>
-        </div>
-      </>
-    )}
-  </div>
-);
-};
-
-export default Home;
